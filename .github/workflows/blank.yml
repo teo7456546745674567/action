@@ -1,0 +1,28 @@
+name: Run Playwright Infinite Tabs
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  run-playwright:
+    runs-on: ubuntu-latest
+    timeout-minutes: 360 # Giới hạn chạy max 6 tiếng, GitHub không cho chạy vô hạn
+
+    steps:
+    - name: Checkout repo
+      uses: actions/checkout@v3
+
+    - name: Setup Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.11'
+
+    - name: Install dependencies
+      run: |
+        pip install playwright
+        playwright install chromium
+
+    - name: Run multi-tab headless
+      run: python multi_tab_runner.py
